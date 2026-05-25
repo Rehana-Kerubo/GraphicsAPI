@@ -2,6 +2,12 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
+// DOM elements
+const startScreen = document.getElementById('startScreen');
+const startBtn = document.getElementById('startGameBtn');
+const gameUI = document.getElementById('gameUI');
+const controlsUI = document.getElementById('controlsUI');
+
 // Paddle
 const paddle = {
     x: canvas.width/2 - 50,
@@ -21,6 +27,7 @@ const ball = {
 
 let score = 0;
 let gameRunning = true;
+let animationId = null;
 
 // Keyboard controls
 const keys = {};
@@ -38,7 +45,6 @@ document.addEventListener('keyup', (e) => {
     }
 });
 
-// Animation 
 // Move paddle
 function updatePaddle() {
     const speed = 7;
@@ -103,14 +109,14 @@ function updateBall() {
     }
 }
 
-// Geometry- define shape, size and position of objects (arc, fillRect, text)
-// Rasterization- convert vector shapes to pixels on the screen( fill, colors, shadows, transparency)
+// Geometry- Defines shapes, vertices, and primitives before rasterization
+// Rasterization- Converts geometric data into pixels on the screen
 function draw() {
-    // Clear screen
+    // Clear screen (Geometry: defines a rectangle that covers entire canvas)
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    // Draw ball with glow
+    // ========== RASTERIZATION: BALL ==========
     ctx.shadowBlur = 10;
     ctx.shadowColor = '#00ffff';
     ctx.beginPath();
@@ -118,18 +124,18 @@ function draw() {
     ctx.fillStyle = '#00ffff';
     ctx.fill();
     
-    // Draw paddle
+    // ========== RASTERIZATION: PADDLE ==========
     ctx.shadowBlur = 5;
     ctx.fillStyle = '#ff00ff';
     ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
     
-    // Draw paddle glow
+    // Paddle glow
     ctx.fillStyle = 'rgba(255, 0, 255, 0.3)';
     ctx.fillRect(paddle.x - 5, paddle.y, paddle.width + 10, paddle.height);
     
     ctx.shadowBlur = 0;
     
-    // Game over screen
+    // ========== RASTERIZATION: GAME OVER SCREEN ==========
     if (!gameRunning) {
         ctx.fillStyle = 'rgba(0,0,0,0.8)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -164,17 +170,32 @@ function resetGame() {
     ball.vy = 3;
 }
 
-// Animation loop
+// Animation
 function animate() {
     updatePaddle();
     updateBall();
     draw();
-    requestAnimationFrame(animate);
+    animationId = requestAnimationFrame(animate);
 }
 
-// Event listeners
-document.getElementById('resetBtn').addEventListener('click', resetGame);
+//start game
+function startGame() {
+    // Hide start screen
+    startScreen.style.display = 'none';
+    
+    // Show game elements
+    canvas.style.display = 'block';
+    gameUI.style.display = 'flex';
+    controlsUI.style.display = 'block';
+    
+    // Reset game state
+    resetGame();
+    
+    // Start animation if not already running
+    if (!animationId) {
+        animate();
+    }
+}
 
-// Start game
-resetGame();
-animate();
+startBtn.addEventListener('click', startGame);
+document.getElementById('resetBtn').addEventListener('click', resetGame);

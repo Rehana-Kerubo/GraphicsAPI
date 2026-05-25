@@ -1,20 +1,47 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rehana's Bouncy Ball</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game">
-        <canvas id="canvas" width="600" height="400"></canvas>
-        <div class="info">
+        <!-- Landing Page / Start Screen -->
+        <div id="startScreen" class="start-screen">
+            <div class="start-content">
+                <h1 class="game-title"> REHANA'S BOUNCY BALL</h1>
+                <div class="game-instructions">
+                    <div class="instruction-item">
+                        <span class="key">←</span>
+                        <span>Move Left</span>
+                    </div>
+                    <div class="instruction-item">
+                        <span class="key">→</span>
+                        <span>Move Right</span>
+                    </div>
+                    <div class="instruction-item">
+                        <span>Don't let ball hit bottom!</span>
+                    </div>
+                </div>
+                <button id="startGameBtn" class="start-btn">▶ START GAME</button>
+                <div class="game-tip">
+                    💡 Tip: Ball speeds up every 5 hits!
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Canvas (hidden until start) -->
+        <canvas id="canvas" width="600" height="400" style="display: none;"></canvas>
+        
+        <div class="info" style="display: none;" id="gameUI">
             <div>SCORE: <span id="score">0</span></div>
             <button id="resetBtn">NEW GAME</button>
         </div>
-        <div class="controls">← → Arrow Keys to Move Paddle</div>
+        <div class="controls" style="display: none;" id="controlsUI">← → Arrow Keys to Move Paddle</div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
